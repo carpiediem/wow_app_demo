@@ -1,0 +1,28 @@
+extends ../layout
+
+block content
+  .page-header
+    h3 Sign in
+  form.form-horizontal#step-one(method='POST')
+    input(type='hidden', name='_csrf', value=_csrf)
+    .form-group
+      label.col-sm-3.control-label(for='tel') Mobile Number
+      .col-sm-7
+        input.form-control(type='tel', name='tel', id='tel', placeholder='Mobile Number', autofocus, required)
+    .form-group
+      .col-sm-offset-3.col-sm-7
+        button.col-sm-6.btn.btn-primary(type='submit')
+          i.fa.fa-mobile
+          | Request Verification Code
+  form.form-horizontal#step-two(method='POST')
+    input(type='hidden', name='_csrf', value=_csrf)
+    input(type='hidden', name='tel')
+    .form-group
+      label.col-sm-3.control-label(for='code') Verification Code
+      .col-sm-7
+        input.form-control(type='number', name='code', id='code', placeholder='Verification Code', required)
+    .form-group
+      .col-sm-offset-3.col-sm-7
+        button.col-sm-3.btn.btn-success(type='submit')
+          i.fa.fa-check
+          | Verify

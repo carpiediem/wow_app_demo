@@ -1,0 +1,39 @@
+extends layout
+
+block content
+  script(src='http://code.jquery.com/jquery-1.9.1.min.js')
+  script(src='http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js')
+  script(src='http://maxwells.github.io/assets/bootstrap-tags/js/bootstrap-tags.js')
+  link(rel="stylesheet" type="text/css" href="http://maxwells.github.io/assets/bootstrap-tags/css/bootstrap-tags.css")
+
+
+  .page-header
+    h3 Upload a Video
+
+  form.form-horizontal(method='POST')
+    input(type='hidden', name='_csrf', value=_csrf)
+    .form-group
+      label(class='col-sm-2 control-label', for='title') Video Title
+      .col-sm-8
+        input.form-control(type='text', name='title', id='title', autofocus=true)
+    .form-group
+      label(class='col-sm-2 control-label', for='tags') Video File
+      .col-sm-8
+        input.form-control.file(type='file', name='file', id='file')
+    .form-group
+      label(class='col-sm-2 control-label', for='description') Description
+      .col-sm-8
+        textarea.form-control(name='description', id='description', rows='7')
+    .form-group
+      label(class='col-sm-2 control-label', for='tags') Tags
+      .col-sm-8
+        input.form-control(type='text', name='title', id='title', autofocus=true)
+        p separate with commas
+    .form-group
+      .col-sm-offset-2.col-sm-8
+        button.btn.btn-primary(type='submit')
+          i.fa.fa-cloud-upload
+          | Upload
+
+    link(href="http://plugins.krajee.com/assets/de6bba3f/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css")
+    script(src="http://plugins.krajee.com/assets/de6bba3f/js/fileinput.min.js")
