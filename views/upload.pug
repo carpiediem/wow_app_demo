@@ -10,14 +10,14 @@ block content
   .page-header
     h3 Upload a Video
 
-  form.form-horizontal(method='POST')
+  form.form-horizontal(method='POST' enctype='multipart/form-data')
     input(type='hidden', name='_csrf', value=_csrf)
     .form-group
       label(class='col-sm-2 control-label', for='title') Video Title
       .col-sm-8
-        input.form-control(type='text', name='title', id='title', autofocus=true)
+        input.form-control(type='text', name='title', id='title', value='Sample Name' placeholder='What should we call it?' autofocus required)
     .form-group
-      label(class='col-sm-2 control-label', for='tags') Video File
+      label(class='col-sm-2 control-label', for='file') Video File
       .col-sm-8
         input.form-control.file(type='file', name='file', id='file')
     .form-group
@@ -27,7 +27,7 @@ block content
     .form-group
       label(class='col-sm-2 control-label', for='tags') Tags
       .col-sm-8
-        input.form-control(type='text', name='title', id='title', autofocus=true)
+        input.form-control(type='text', name='tags', id='tags', autofocus=true)
         p separate with commas
     .form-group
       .col-sm-offset-2.col-sm-8

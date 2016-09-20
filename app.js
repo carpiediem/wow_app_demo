@@ -95,7 +95,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use((req, res, next) => {
-  if (req.path === '/api/upload') {
+  if (req.path === '/api/upload' || req.path === '/upload') {
     next();
   } else {
     lusca.csrf()(req, res, next);
@@ -136,7 +136,9 @@ app.get('/logout', userController.logout);
 // app.get('/signup', userController.getSignup);
 // app.post('/signup', userController.postSignup);
 app.get('/upload', passportConfig.isAuthenticated, uploadController.getUpload);
-app.post('/upload', passportConfig.isAuthenticated, uploadController.postUpload);
+app.post('/upload', upload.single('file'), uploadController.postUpload);
+app.get('/video/:fileName', uploadController.getVideo);
+
 // app.get('/account', passportConfig.isAuthenticated, userController.getAccount);
 // app.post('/account/profile', passportConfig.isAuthenticated, userController.postUpdateProfile);
 // app.post('/account/password', passportConfig.isAuthenticated, userController.postUpdatePassword);
@@ -170,8 +172,8 @@ app.post('/api/twilio', apiController.postTwilio);
 // app.get('/api/paypal/success', apiController.getPayPalSuccess);
 // app.get('/api/paypal/cancel', apiController.getPayPalCancel);
 // app.get('/api/lob', apiController.getLob);
-// app.get('/api/upload', apiController.getFileUpload);
-// app.post('/api/upload', upload.single('myFile'), apiController.postFileUpload);
+app.get('/api/upload', apiController.getFileUpload);
+app.post('/api/upload', upload.single('myFile'), apiController.postFileUpload);
 // app.get('/api/pinterest', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getPinterest);
 // app.post('/api/pinterest', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.postPinterest);
 // app.get('/api/google-maps', apiController.getGoogleMaps);

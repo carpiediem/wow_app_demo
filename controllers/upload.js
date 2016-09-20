@@ -1,11 +1,14 @@
-const nodemailer = require('nodemailer');
-const transporter = nodemailer.createTransport({
-  service: 'SendGrid',
-  auth: {
-    user: process.env.SENDGRID_USER,
-    pass: process.env.SENDGRID_PASSWORD
-  }
-});
+var fs = require('fs');
+var path = require('path');
+// var mongoose = require('mongoose');
+// var Schema = mongoose.Schema;
+// mongoose.connect('mongodb://127.0.0.1/test');
+// var conn = mongoose.connection;
+//
+// var fs = require('fs');
+//
+// var Grid = require('gridfs-stream');
+// Grid.mongo = mongoose.mongo;
 
 /**
  * GET /contact
@@ -22,30 +25,34 @@ exports.getUpload = (req, res) => {
  * Send a contact form via Nodemailer.
  */
 exports.postUpload = (req, res) => {
-  req.assert('name', 'Name cannot be blank').notEmpty();
-  req.assert('email', 'Email is not valid').isEmail();
-  req.assert('message', 'Message cannot be blank').notEmpty();
+  req.assert('title', 'Title cannot be blank').notEmpty();
+  //req.assert('file', 'File is not valid').notEmpty();
 
   const errors = req.validationErrors();
 
   if (errors) {
     req.flash('errors', errors);
-    return res.redirect('/contact');
+    return res.redirect('/upload');
   }
 
-  const mailOptions = {
-    to: 'your@email.com',
-    from: `${req.body.name} <${req.body.email}>`,
-    subject: 'Contact Form | Hackathon Starter',
-    text: req.body.message
-  };
+  console.log("req.body", req.body);
+  console.log("req.file", req.file);
 
-  transporter.sendMail(mailOptions, (err) => {
-    if (err) {
-      req.flash('errors', { msg: err.message });
-      return res.redirect('/contact');
-    }
-    req.flash('success', { msg: 'Email has been sent successfully!' });
-    res.redirect('/contact');
-  });
+  return res.redirect('/');
 };
+
+
+exports.getVideo = (req, res) => {
+
+  var filepath = path.join(path.dirname(module.parent.filename), 'uploads', req.params.fileName);
+  fs.readFile(filepath, function (err, data) {
+    if (err) {
+      res.statusCode = 404;
+      res.end("Error : file not found");
+    }
+
+    res.type('video/mp4');
+    res.end(data, "binary");
+  });
+
+}
