@@ -1,5 +1,6 @@
 var fs = require('fs');
 var path = require('path');
+var ffmpeg = require('fluent-ffmpeg');
 // var mongoose = require('mongoose');
 // var Schema = mongoose.Schema;
 // mongoose.connect('mongodb://127.0.0.1/test');
@@ -35,8 +36,19 @@ exports.postUpload = (req, res) => {
     return res.redirect('/upload');
   }
 
-  console.log("req.body", req.body);
-  console.log("req.file", req.file);
+  // console.log("req.body", req.body);
+  // console.log("req.file", req.file);
+
+  console.log("running ffmpeg");
+  var command = ffmpeg(req.file.path)
+    .videoCodec('libx264')
+    .on('error', function(err, stdout, stderr) {
+      console.log('an error happened: ' + err.message, stdout, stderr);
+    })
+    .on('end', function() {
+      console.log('Finished processing');
+    })
+    .save('D:\\nodejs\\wow_app_demo\\uploads\\output.mp4');
 
   return res.redirect('/');
 };
