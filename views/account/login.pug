@@ -1,28 +1,42 @@
 extends ../layout
 
 block content
+  link(rel="stylesheet" href="/css/lib/intlTelInput.css")
+
+
   .page-header
     h3 Sign in
-  form.form-horizontal#step-one(method='POST')
+  form.form-horizontal(method='POST')
     input(type='hidden', name='_csrf', value=_csrf)
+    input(type='hidden', name='countryCode', id='countryCode')
+    input(type='hidden', name='isValid', id='isValid')
     .form-group
       label.col-sm-3.control-label(for='tel') Mobile Number
-      .col-sm-7
-        input.form-control(type='tel', name='tel', id='tel', placeholder='Mobile Number', autofocus, required)
-    .form-group
-      .col-sm-offset-3.col-sm-7
+      .col-sm-3
+        input.form-control(type='tel', name='phone', id='phone', placeholder='Mobile Number' value='64626099', autofocus, required)
+      .col-sm-3
         button.col-sm-6.btn.btn-primary(type='submit')
           i.fa.fa-mobile
-          | Request Verification Code
-  form.form-horizontal#step-two(method='POST')
-    input(type='hidden', name='_csrf', value=_csrf)
-    input(type='hidden', name='tel')
-    .form-group
-      label.col-sm-3.control-label(for='code') Verification Code
-      .col-sm-7
-        input.form-control(type='number', name='code', id='code', placeholder='Verification Code', required)
-    .form-group
-      .col-sm-offset-3.col-sm-7
-        button.col-sm-3.btn.btn-success(type='submit')
-          i.fa.fa-check
           | Verify
+
+block scripts
+  script(src="/js/lib/intlTelInput.min.js")
+  script.
+    $(function(){
+
+      // Initialize the phone number UI
+      $("#phone").intlTelInput({
+        onlyCountries: ["hk", "sg", "us"],
+        initialCountry: "hk",
+        utilsScript: "/js/lib/intlTelInput-utils.js"
+      });
+
+      // Read value before submitting form
+      $( "form" ).submit(function() {
+        var countryData = $("#phone").intlTelInput("getSelectedCountryData");
+        var isValid = $("#phone").intlTelInput("isValidNumber");
+        $("#countryCode").val(countryData.dialCode);
+        $("#isValid").val(isValid);
+      });
+
+    });

@@ -25,23 +25,43 @@ passport.deserializeUser((id, done) => {
 });
 
 /**
- * Sign in using Email and Password.
+ * Sign in using id and security code.
  */
-passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
-  User.findOne({ email: email.toLowerCase() }, (err, user) => {
-    if (err) { return done(err); }
-    if (!user) {
-      return done(null, false, { msg: `Email ${email} not found.` });
+passport.use(new LocalStrategy({ usernameField: 'id', passwordField: 'securityCode' }, (username, password, done) => {
+  User.findById(username, function(err, user) {
+    if (err || !user) {
+      return die('User not found for this ID.  Please request another security code.');
     }
-    user.comparePassword(password, (err, isMatch) => {
+
+    // If we find the user, let's validate the token they entered
+    user.verifyAuthyToken(password, function(err) {
       if (err) { return done(err); }
-      if (isMatch) {
-        return done(null, user);
-      }
-      return done(null, false, { msg: 'Invalid email or password.' });
+
+      user.verified = true;
+      user.save();
+      return done(null, user);
     });
   });
 }));
+
+/**
+ * Sign in using Email and Password.
+ */
+// passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
+//   User.findOne({ email: email.toLowerCase() }, (err, user) => {
+//     if (err) { return done(err); }
+//     if (!user) {
+//       return done(null, false, { msg: `Email ${email} not found.` });
+//     }
+//     user.comparePassword(password, (err, isMatch) => {
+//       if (err) { return done(err); }
+//       if (isMatch) {
+//         return done(null, user);
+//       }
+//       return done(null, false, { msg: 'Invalid email or password.' });
+//     });
+//   });
+// }));
 
 /**
  * OAuth Strategy Overview

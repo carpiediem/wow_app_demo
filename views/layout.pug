@@ -11,8 +11,8 @@ html
     link(rel='stylesheet', href='/css/main.css')
 
   body
-    //if user
-    include partials/header
+    if user
+      include partials/header
 
     .container
       include partials/flash
@@ -32,3 +32,5 @@ html
       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
       ga('create', 'UA-XXXXX-X', 'auto');
       ga('send', 'pageview');
+
+    block scripts
