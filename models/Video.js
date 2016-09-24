@@ -35,6 +35,8 @@ VideoSchema.methods.transcode = function(cb) {
   var uploadPath = self.getPath();
   ffmpeg(uploadPath)
     .videoCodec('libx264')
+    .size('1280x720')  // bad solution for vertical video, but it will do for a demo
+    .videoBitrate(1000)
     .on('error', function(err, stdout, stderr) {
       console.log('transcode error:', stdout, stderr);
     })

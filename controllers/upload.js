@@ -14,7 +14,7 @@ exports.getUpload = (req, res) => {
 
 /**
  * POST /contact
- * Send a contact form via Nodemailer.
+ * Add a record to the database and an MP4 to the file system
  */
 exports.postUpload = (req, res) => {
   req.assert('title', 'Title cannot be blank').notEmpty();
@@ -36,7 +36,7 @@ exports.postUpload = (req, res) => {
     description: req.body.description,
     tags: req.body.tags.split(',')
   });
-  //video.save();
+  video.save();
   video.transcode();
 
   req.flash('It may take a few minutes to process your video, before it appears.');
@@ -51,7 +51,7 @@ exports.getVideo = (req, res) => {
   fs.readFile(filepath, function (err, data) {
     if (err) {
       res.statusCode = 404;
-      res.end("Error : file not found");
+      return res.end("Error : file not found");
     }
 
     res.type('video/mp4');

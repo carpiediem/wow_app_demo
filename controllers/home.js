@@ -7,10 +7,12 @@ const Video = require('../models/Video');
 exports.index = (req, res) => {
 
   // Query mongodb for uploaded videos
-  var videos = Video.find({}, (err, videos) => {
+  var videos = Video.find({}, displayVideos).sort('-_id').limit(12);
+
+  function displayVideos(err, videos) {
     if (err) { return done(err); }
 
-    videos.map(function(v, i) {
+    var renderable = videos.map(function(v, i) {
       v.url = '/video/' + v.key;
       v.autoplay = i==0;
       return v;
@@ -18,9 +20,9 @@ exports.index = (req, res) => {
 
     res.render('home', {
       title: 'Home',
-      videos: videos
+      videos: renderable
     });
 
-  }).sort('-_id').limit(12);
+  }
 
 };

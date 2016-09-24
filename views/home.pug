@@ -4,8 +4,11 @@ block content
   each v in videos
     .col-sm-4
       .video-container
-        video(autoplay=v.autoplay loop)
-          source(src=v.url type="video/mp4")
+        if v.transcoded
+          video(autoplay=v.autoplay loop)
+            source(src=v.url type="video/mp4")
+        else
+          div.wait Video is processing, please try again
         h3 #{v.title}
         p.description #{v.description}
         p.tags
