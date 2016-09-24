@@ -19,8 +19,7 @@ function processResponse(result) {
 
   // Convert the response into a jQuery object, then isolate the feature sections
   var page_jqobj = $($.parseHTML(result));
-  var features_jqobj = page_jqobj.find("section.app section");
-  console.log(features_jqobj);
+  var features_jqobj = page_jqobj.find("div#how-it-works div.step");
 
   // Parse the HTML into JSON and display the result
   var features_json = $.map(features_jqobj, feature_parser);
@@ -29,18 +28,11 @@ function processResponse(result) {
 }
 
 function feature_parser(jqObj) {
-
-  // Clean up the whitespace in the subtitle
-  var padded_subtitle = $(jqObj).find("div.content").text();
-  var clean_subtitle = padded_subtitle.replace("\n","").trim();
-
-  // Return the object to be used as JSON
   return {
-    title: $(jqObj).find("h4").text(),
-    subtitle: clean_subtitle,
+    title: $(jqObj).find("h4 span").eq(1).text(),
+    subtitle: $(jqObj).find("p.grey").text(),
     image: $(jqObj).find("img").attr("src")
   };
-
 }
 </script>
 </head>
