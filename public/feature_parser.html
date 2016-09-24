@@ -5,19 +5,28 @@
 <script>
 $(document).ready(function(){
   // Fetch the Wow App website once jQuery is loaded
-  $.ajax({url: "http://www.wowsport.io/", success: function(result){
-
-    // Convert the response into a jQuery object, then isolate the feature sections
-    var page_jqobj = $($.parseHTML(result));
-    var features_jqobj = page_jqobj.find("section.app section");
-    console.log(features_jqobj);
-
-    // Parse the HTML into JSON and display the result
-    var features_json = $.map(features_jqobj, feature_parser);
-    $("#output").text( JSON.stringify(features_json, null, 2) );
-
-  }});
+  $.ajax({
+    type: 'GET',
+    url: "http://www.wowsport.io/",
+    contentType: 'text/plain',
+    xhrFields: {withCredentials: false},
+    crossDomain : true,
+    success: processResponse
+  });
 });
+
+function processResponse(result) {
+
+  // Convert the response into a jQuery object, then isolate the feature sections
+  var page_jqobj = $($.parseHTML(result));
+  var features_jqobj = page_jqobj.find("section.app section");
+  console.log(features_jqobj);
+
+  // Parse the HTML into JSON and display the result
+  var features_json = $.map(features_jqobj, feature_parser);
+  $("#output").text( JSON.stringify(features_json, null, 2) );
+
+}
 
 function feature_parser(jqObj) {
 
@@ -31,7 +40,7 @@ function feature_parser(jqObj) {
     subtitle: clean_subtitle,
     image: $(jqObj).find("img").attr("src")
   };
-  
+
 }
 </script>
 </head>
