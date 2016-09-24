@@ -77,11 +77,12 @@ textarea {
 // -------------------------
 
 .video-container {
+  width: 100%;
   display: inline-block;
   color: #333;
   background: #f8f8f8;
   border-bottom: 2px solid #9d426b;
-  height: 210px;
+  min-height: 210px;
   margin-bottom: 20px;
 
   video {
